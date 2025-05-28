@@ -2,7 +2,11 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+const actorsApiUrl = 'https://lanciweb.github.io/demo/api/actors/';
+const actressesApiUrl = 'https://lanciweb.github.io/demo/api/actresses/';
+
 function App() {
+  const [actresses, setActresses] = useState([]);
   const [actors, setActors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,14 +14,20 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://lanciweb.github.io/demo/api/actors/');
-        setActors(response.data/*.slice(0, 10)*/);
+        const [actorsResponse, actressesResponse] = await Promise.all([
+          axios.get(actorsApiUrl),
+          axios.get(actressesApiUrl)
+        ]);
+
+        setActors(actorsResponse.data);
+        setActresses(actressesResponse.data);
         setLoading(false);
       } catch (err) {
         setError(err.message);
         setLoading(false);
       }
-    };
+    }
+
 
     fetchData();
   }, []);
@@ -27,7 +37,7 @@ function App() {
 
   return (
     <div className="container py-4">
-      <h1 className="mb-4">React Actors from API</h1>
+      <h1 className="mb-4">React Actors and Actresses from API</h1>
 
       <div className="row">
         {actors.map(actor => (
@@ -52,6 +62,33 @@ function App() {
             </div>
           </div>
         ))}
+
+
+
+        {actresses.map(actress => (
+          <div key={actress.id} className="col-md-4 mb-4">
+            <div className="card h-100">
+              <img src={actress.image} className="card-img-top" alt={actress.name} />
+              <div className="card-body">
+                <h5 className="card-title">{actress.name}</h5>
+                <h6 className="card-subtitle mb-2 text-muted">Born: {actress.birth_year}</h6>
+                <h6 className="card-subtitle mb-2 text-muted">Death: {actress.death_year ?? 'Immortal'}</h6>
+                <p className="card-text">
+                  <strong>Nationality:</strong> {actress.nationality}<br />
+                  <strong>Awards:</strong> {actress.awards ?? 'No awards listed'}<br />
+                  <strong>Movies:</strong> {actress.most_famous_movies ? actress.most_famous_movies.join(', ') : 'No movies listed'}
+                </p>
+              </div>
+              <div className="card-footer">
+                <small className="text-muted">
+                  Bio: {actress.biography}
+                </small>
+              </div>
+            </div>
+          </div>
+        ))}
+
+
       </div>
     </div>
   );
