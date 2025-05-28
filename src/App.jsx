@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../src/assets/css/app.css';
 
 const actorsApiUrl = 'https://lanciweb.github.io/demo/api/actors/';
 const actressesApiUrl = 'https://lanciweb.github.io/demo/api/actresses/';
@@ -47,7 +48,7 @@ function App() {
               <div className="card-body">
                 <h5 className="card-title">{actor.name} {actor.surname}</h5>
                 <h6 className="card-subtitle mb-2 text-muted">Born: {actor.birth_year}</h6>
-                <h6 className="card-subtitle mb-2 text-muted">Death: {actor.death_year ?? 'Immortal'}</h6>
+                {actor.death_year && <h6 className="card-subtitle mb-2 text-muted">Death: {actor.death_year}</h6>}
                 <p className="card-text">
                   <strong>Nationality:</strong> {actor.nationality}<br />
                   <strong>Awards:</strong> {actor.awards ? actor.awards.join(', ') : 'No awards listed'}<br />
@@ -72,7 +73,7 @@ function App() {
               <div className="card-body">
                 <h5 className="card-title">{actress.name}</h5>
                 <h6 className="card-subtitle mb-2 text-muted">Born: {actress.birth_year}</h6>
-                <h6 className="card-subtitle mb-2 text-muted">Death: {actress.death_year ?? 'Immortal'}</h6>
+                {actress.death_year && <h6 className="card-subtitle mb-2 text-muted">Death: {actress.death_year}</h6>}
                 <p className="card-text">
                   <strong>Nationality:</strong> {actress.nationality}<br />
                   <strong>Awards:</strong> {actress.awards ?? 'No awards listed'}<br />

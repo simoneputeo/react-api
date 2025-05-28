@@ -1,0 +1,9 @@
+.card.h-100 {
+  overflow: hidden;
+}
+
+img[alt="Audrey Hepburn"] {
+  width: 200%;
+  object-fit: cover;
+  object-position: left;
+}
